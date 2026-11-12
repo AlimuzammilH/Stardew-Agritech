@@ -1,5 +1,7 @@
 # Agritech for Stardew Valley
 
+![Agritech's buildings, machines, graded goods and buyers, drawn for the mod](docs/agritech_showcase.png)
+
 Agritech turns a Stardew Valley farm into an agritech business. It's a single C# mod for Stardew Valley 1.6 that adds a modern farm-technology layer on top of the base game: a tech Hub and its own skill, soil sensors and smart collars, new livestock breeds, leather and Wagyu production chains, luxury grading with provenance certificates, contracts with fashion houses and restaurants, freight logistics with perishable goods, waste-to-fuel energy, drones, a horse herd, and buyers who visit your farm.
 
 Vanilla Stardew sells anything through the shipping bin at a fixed price. Agritech adds a second economy beside it: grade your goods, build relationships with buyers, meet deadlines and minimum grades, choose how to ship, and keep perishables cold on the way.
