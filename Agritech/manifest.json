@@ -1,0 +1,12 @@
+{
+  "Name": "Agritech",
+  "Author": "Ali",
+  "Version": "0.4.2",
+  "Description": "Agritech layer: Hub and skill, sensors and collars, breeds, leather and Wagyu chains, luxury grading with provenance, contracts, freight, waste-to-fuel, drones, horses and visitors.",
+  "UniqueID": "Ali.Agritech",
+  "EntryDll": "Agritech.dll",
+  "MinimumApiVersion": "4.0.0",
+  "UpdateKeys": [
+    "GitHub:AlimuzammilH/Stardew-Agritech"
+  ]
+}

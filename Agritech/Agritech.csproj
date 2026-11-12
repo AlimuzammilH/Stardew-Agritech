@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Agritech</AssemblyName>
+    <RootNamespace>Agritech</RootNamespace>
+    <Version>0.4.2</Version>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <EnableHarmony>true</EnableHarmony>
+    <!-- The game folder is detected automatically. To point at a specific install, uncomment:
+    <GamePath>C:\Path\To\Stardew Valley</GamePath> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.3.2" />
+  </ItemGroup>
+
+</Project>

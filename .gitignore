@@ -1,0 +1,18 @@
+# build output
+bin/
+obj/
+*.zip
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# never commit game files or other people's mods
+*.xnb
+Stardew Valley.dll
+StardewModdingAPI.dll
+MonoGame.Framework.dll
+config.json
