@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.5
+- Herd horses now use the same sprite layout as the game's cows (left is the mirrored right; resting and grazing frames in the right places), fixing frozen or wrong resting/grazing animations and the game's sprite-height warning.
+- Herd horses facing the camera now have their head: the game draws a horse's front-facing head separately, so it's baked into those frames.
+- Freshness: an item's made-day is checked whenever one is stamped, even a day before the save began (previously such dates were ignored).
+- Self-test: builds test buildings the way the game does when construction starts (so the Cold Warehouse gets its storage chest) and borrows an inventory slot when the inventory is full. All 80 checks pass in-game.
+
 ## 0.4.3
 - Balance: an animal must have been an adult for a full season (28 days) before the Butcher's Tag works, and meat cuts grow with its time as an adult (5 after one season, up to 7). Buying calves and retiring them days later no longer prints money.
 - Balance: breed prices brought in line with vanilla payback times: Merino and Angora 12,000g, Cashmere Goat 10,000g, Wagyu 8,000g.

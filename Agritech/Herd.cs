@@ -87,7 +87,7 @@ namespace Agritech
                 d.HarvestedTexture = null;
                 d.ShopTexture = Tex(c.coat, "shop");
                 d.ShopSourceRect = new Rectangle(0, 0, 32, 16);
-                d.UseFlippedRightForLeft = false;
+                d.UseFlippedRightForLeft = true;
                 d.Skins = null;
                 d.DaysToMature = 7;
                 data[Id(c.coat)] = d;

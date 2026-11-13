@@ -195,18 +195,18 @@ namespace Agritech
         }
 
         /// <summary>Remove the contract quantity from the inventory; returns the oldest made-day among perishables, or -1.</summary>
-        public static int TakeItems(IList<Item> items, Contract c)
+        public static int? TakeItems(IList<Item> items, Contract c)
         {
             Goods g = Goods.Get(c.MaterialId);
             int need = c.Quantity;
-            int oldest = -1;
+            int? oldest = null;
             for (int i = 0; i < items.Count && need > 0; i++)
             {
                 Item item = items[i];
                 if (!g.Accepts(item, c.MinTier))
                     continue;
                 if (item.modData.TryGetValue(ModEntry.MadeKey, out string made) && int.TryParse(made, out int day))
-                    oldest = oldest < 0 ? day : Math.Min(oldest, day);
+                    oldest = oldest == null ? day : Math.Min(oldest.Value, day);
                 int take = Math.Min(need, item.Stack);
                 need -= take;
                 item.Stack -= take;
@@ -230,14 +230,14 @@ namespace Agritech
                 Game1.player.Items.ReduceId(Ids.O(Ids.Fuel), 1);
             }
 
-            int oldest = TakeItems(source, c);
+            int? oldest = TakeItems(source, c);
             Goods g = Goods.Get(c.MaterialId);
             int arrive = Game1.Date.TotalDays + Transport.Days(mode);
             bool spoiled = false;
-            if (g.Perishable && oldest >= 0)
+            if (g.Perishable && oldest != null)
             {
                 int shelf = g.Material != null ? 6 : Ids.ShelfLife.TryGetValue(g.Accepted?[0] ?? "", out int s) ? s : 4;
-                spoiled = arrive - oldest > shelf;
+                spoiled = arrive - oldest.Value > shelf;
             }
 
             int cost = (int)(c.Reward * Transport.CostFraction(mode));

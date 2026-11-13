@@ -8,7 +8,9 @@ namespace Agritech
     /// <summary>
     /// Builds the herd horse sheets at load time from the game's own horse sprite (Animals/horse), so the mod ships
     /// no game art: takes the saddle off, recolours the coat (bay, black, grey) and rearranges the frames into the
-    /// farm-animal layout (4 columns x 5 rows of 32x32: walk down, right, up, left, then grazing).
+    /// farm-animal layout the game uses for cows (4 columns x 5 rows of 32x32): walk down, right, up (left is the
+    /// right row mirrored), then frames 12-15 = resting front, resting front, grazing side, resting back, and
+    /// 16-19 = grazing front.
     /// </summary>
     internal static class HorseArt
     {
@@ -57,12 +59,38 @@ namespace Agritech
                 Blit(sheet, walk[i], 0, outPx, i, 0, false);
                 Blit(sheet, walk[i], 1, outPx, i, 1, false);
                 Blit(sheet, walk[i], 2, outPx, i, 2, false);
-                Blit(sheet, walk[i], 1, outPx, i, 3, true);
-                Blit(sheet, i, 3, outPx, i, 4, false); // grazing: head going down
+                Blit(sheet, 0, 0, outPx, i, 4, false);   // 16-19: grazing seen from the front (standing; the horse sprite has no head-down front view)
             }
+            Blit(sheet, 0, 0, outPx, 0, 3, false);       // 12: resting, front
+            Blit(sheet, 0, 0, outPx, 1, 3, false);       // 13: resting, front
+            Blit(sheet, 3, 3, outPx, 2, 3, false);       // 14: grazing, side (head down)
+            Blit(sheet, 0, 2, outPx, 3, 3, false);       // 15: resting, back
+
+            // facing the camera, the game draws a horse's head separately (like the riding horse); bake it in
+            foreach (var (c, r) in new[] { (0, 0), (1, 0), (2, 0), (3, 0), (0, 3), (1, 3), (0, 4), (1, 4), (2, 4), (3, 4) })
+                AddHead(sheet, outPx, c, r);
             if (kind == "baby")
                 outPx = Foal(outPx, Coats[coat]);
             return (outPx, 128, 160);
+        }
+
+        /// <summary>Paste the front-facing head (9x15 at 160,96 in the game's sheet) onto a front view, following the body's bob.</summary>
+        private static void AddHead(Color[] sheet, Color[] dst, int col, int row)
+        {
+            int top = 32;
+            for (int y = 0; y < 32 && top == 32; y++)
+                for (int x = 0; x < 32; x++)
+                    if (dst[(row * 32 + y) * 128 + col * 32 + x].A == 255) { top = y; break; }
+            int hy = top - 2; // calibrated: ears just clear the back, like the riding horse facing down
+            for (int y = 0; y < 15; y++)
+                for (int x = 0; x < 9; x++)
+                {
+                    Color c = sheet[(96 + y) * SrcWidth + 160 + x];
+                    int ty = hy + y;
+                    if (c.A == 0 || ty < 0 || ty >= 32)
+                        continue;
+                    dst[(row * 32 + ty) * 128 + col * 32 + 12 + x] = c;
+                }
         }
 
         private static void Blit(Color[] src, int sc, int sr, Color[] dst, int dc, int dr, bool flip)

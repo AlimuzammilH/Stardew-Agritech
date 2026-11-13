@@ -382,7 +382,7 @@ namespace Agritech
             {
                 var c = TestContract("Milk", 0, 1, 1000);
                 Item milk = ItemRegistry.Create(Ids.VMilk);
-                milk.modData[ModEntry.MadeKey] = (Game1.Date.TotalDays - 20).ToString();
+                milk.modData[ModEntry.MadeKey] = (Game1.Date.TotalDays - 20).ToString();   // before the save began on a new farm; still a real date
                 ContractBook.Ship(c, new List<Item> { milk }, "Cart", chargeFuel: false);
                 var s = S.Shipments.First(x => x.ContractId == c.Id);
                 bool spoiled = s.Spoiled;
@@ -573,11 +573,19 @@ namespace Agritech
                 SObject m = ItemRegistry.Create<SObject>(Ids.BC(machineId));
                 PlaceObject(m, tile);
                 bool added = false;
+                int slot = -1;
+                Item parked = null;
                 if (extra != null)
                 {
-                    added = Game1.player.addItemToInventoryBool(extra);
-                    if (!added)
-                        return "SKIP: inventory full, couldn't hand over the extra ingredient";
+                    // a full inventory just means borrowing the last slot for a moment
+                    slot = Game1.player.Items.IndexOf(null);
+                    if (slot < 0)
+                    {
+                        slot = Game1.player.Items.Count - 1;
+                        parked = Game1.player.Items[slot];
+                    }
+                    Game1.player.Items[slot] = extra;
+                    added = true;
                 }
                 try
                 {
@@ -589,8 +597,8 @@ namespace Agritech
                 }
                 finally
                 {
-                    if (added && extra != null)
-                        Game1.player.Items.ReduceId(extra.QualifiedItemId, 1);
+                    if (added)
+                        Game1.player.Items[slot] = parked;
                 }
             });
         }
@@ -648,9 +656,9 @@ namespace Agritech
         private static Building PlaceBuilding(string type, int dx, int dy)
         {
             Building b = Building.CreateInstanceFromId(type, new Vector2(origin.X + dx, origin.Y + dy));
-            b.daysOfConstructionLeft.Value = 0;
-            b.daysUntilUpgrade.Value = 0;
             farm.buildings.Add(b);
+            b.ReloadBuildingData(false, true);   // the step the game runs when Robin starts construction: this is what creates storage chests
+            b.FinishConstruction();
             placedBuildings.Add(b);
             return b;
         }

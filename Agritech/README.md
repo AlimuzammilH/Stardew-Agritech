@@ -1,4 +1,4 @@
-# Agritech v0.4.3
+# Agritech v0.4.5
 
 An agritech layer for Stardew Valley 1.6: tech, breeds, leather and meat chains, luxury grading with provenance, contracts with fashion and restaurant houses, freight, waste-to-fuel, drones, horse husbandry and farm visitors. One mod, no hard dependencies.
 

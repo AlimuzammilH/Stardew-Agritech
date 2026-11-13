@@ -8,7 +8,7 @@ Vanilla Stardew sells anything through the shipping bin at a fixed price. Agrite
 
 | Game | Framework | Dependencies | Version |
 | --- | --- | --- | --- |
-| Stardew Valley 1.6.15 | SMAPI 4.0+ (built against 4.5.2) | none required | 0.4.3 |
+| Stardew Valley 1.6.15 | SMAPI 4.0+ (built against 4.5.2) | none required | 0.4.5 |
 
 ## Features
 
@@ -67,7 +67,7 @@ Agritech runs on its own. If these mods are installed, it links into them:
 
 - Milk moved by Automate never spoils.
 - You can't gift Gus or Emily an item they have an open order for: clicking them counts as a delivery.
-- The horse herd, Drying Rack, Cold Warehouse, the new dishes and the drones load cleanly and are covered by `agritech_selftest`, but haven't had a full in-game playthrough yet. Bug reports are welcome in [Issues](../../issues).
+- The horse herd, Drying Rack, Cold Warehouse, the new dishes and the drones pass `agritech_selftest` (80 of 80 checks), but haven't had a full in-game playthrough yet. Bug reports are welcome in [Issues](../../issues).
 
 ## Building from source
 
