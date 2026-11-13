@@ -16,3 +16,7 @@ Stardew Valley.dll
 StardewModdingAPI.dll
 MonoGame.Framework.dll
 config.json
+
+# files the mod writes while you play
+balance/
+selftest.txt

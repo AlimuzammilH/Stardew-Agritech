@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.3
+- Balance: an animal must have been an adult for a full season (28 days) before the Butcher's Tag works, and meat cuts grow with its time as an adult (5 after one season, up to 7). Buying calves and retiring them days later no longer prints money.
+- Balance: breed prices brought in line with vanilla payback times: Merino and Angora 12,000g, Cashmere Goat 10,000g, Wagyu 8,000g.
+- Balance: the top skill levels need less XP (level 10 at 6,800 XP instead of 15,000), so Hub tier 4 and the Estate/Couture grades arrive in year two instead of year three.
+- `agritech_selftest run`: runs every feature once in the real game and reports PASS/FAIL per check.
+- Balance diary: one line per in-game day in `balance/<save>.csv`.
+
 ## 0.4.2
 - Herd horses are now generated at load time from the game's own horse sprite, so the mod ships no game art.
 

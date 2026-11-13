@@ -76,6 +76,7 @@ namespace Agritech
                 ledger.RemoveAt(0);
 
             Skill.AddXp(5 + tier * 2);
+            BalanceDiary.GradedToday++;
             if (fibre)
                 Integration.AddSewingXp(4 + tier * 2);
             return graded;

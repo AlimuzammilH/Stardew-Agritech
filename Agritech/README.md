@@ -1,4 +1,4 @@
-# Agritech v0.4.2
+# Agritech v0.4.3
 
 An agritech layer for Stardew Valley 1.6: tech, breeds, leather and meat chains, luxury grading with provenance, contracts with fashion and restaurant houses, freight, waste-to-fuel, drones, horse husbandry and farm visitors. One mod, no hard dependencies.
 
@@ -24,7 +24,7 @@ Levels 0-10, earned by collaring (25 xp), grading, retiring animals, grooming, d
 ## Chains
 - **Fibre**: Merino wool, raw cashmere, raw angora (our breeds, sheared), vanilla wool, plus alpaca and llama wool from Mizu's Alpaca & Llama and cashmere and silk from Cloths and Colors (matched by item ID, with a raw-fibre name fallback for other mods) → Grading Table → Fine / Prime / Estate / Couture lots with a provenance certificate.
 - **Grade** = input quality + collared-herd health bonus + skill bonus. Estate and Couture need a tier-4 Hub and a collared herd of that species.
-- **Leather**: Butcher's Tag on an adult cow, Wagyu, buffalo, yak, goat or sheep → Raw Hide (+ beef or Wagyu cuts for cattle) → Drying Rack, 1 day → Dried Hide → Tanning Vat (+1 oak resin) → Tanned Leather → Grading Table.
+- **Leather**: Butcher's Tag on a cow, Wagyu, buffalo, yak, goat or sheep that has been an adult for a full season (28 days) → Raw Hide (+ beef or Wagyu cuts for cattle: 5 after one season, up to 7 for older, healthy animals) → Drying Rack, 1 day → Dried Hide → Tanning Vat (+1 oak resin) → Tanned Leather → Grading Table.
 - **Wagyu**: Wagyu cut (3-day shelf life) → Ageing Locker, 3 days → Dry-Aged Wagyu (6 days) → Grading Table.
 - **Kitchen**: Wagyu Steak (Wagyu cut + garlic), Beef Stew (2 beef cuts + potato + tomato), Wagyu Tasting (dry-aged + fresh Wagyu + horseradish). Kōen, The Brass Pheasant and Gus order them.
 - **Waste to energy**: barns produce manure each morning → Fischer-Tropsch Unit (manure, fibre, sap or hardwood) → Synthetic Fuel → drones, trucks, or Fuel Cell → Battery Pack.
@@ -44,6 +44,11 @@ The fashion and restaurant houses visit on their day each season (8th, 15th, 22n
 
 ## Look
 Sensor posts gain probes, a second antenna and a solar panel as the Hub tier rises. The terminal is a green-screen monitor; the contract board is a corkboard of pinned orders.
+
+## Testing
+- `agritech` shows your skill level and XP; `agritech_xp <amount>` adds XP.
+- `agritech_selftest run` (on a throwaway save: it adds buildings, items, money and XP) drives every feature once and prints PASS/FAIL for each check; results also go to `selftest.txt` in this folder.
+- While you play, a balance diary is written to `balance/<save>.csv` in this folder: one line per day with skill progress, where the XP came from, and contract income next to shipping-bin income.
 
 ## Build
 .NET 6 SDK or newer, then `dotnet build -c Release` in this folder. The build finds your Stardew Valley install automatically (or set `GamePath` in `Agritech.csproj`) and copies the mod into its Mods folder.

@@ -8,7 +8,7 @@ namespace Agritech
     /// <summary>The Agritech skill: levels 0-10, earned by running the tech layer. Gates Hub tiers, machines and buildings.</summary>
     internal static class Skill
     {
-        private static readonly int[] Thresholds = { 100, 380, 770, 1300, 2150, 3300, 4800, 6900, 10000, 15000 };
+        private static readonly int[] Thresholds = { 100, 380, 770, 1300, 2150, 3300, 4100, 4900, 5800, 6800 };
 
         /// <summary>Recipes unlocked at each level (crafting recipe keys).</summary>
         public static readonly (int level, string recipe)[] RecipeUnlocks =
@@ -40,10 +40,13 @@ namespace Agritech
 
         public static int XpForNext(int level) => level >= Thresholds.Length ? 0 : Thresholds[level];
 
-        public static void AddXp(int amount)
+        public static void AddXp(int amount,
+            [System.Runtime.CompilerServices.CallerFilePath] string file = "",
+            [System.Runtime.CompilerServices.CallerMemberName] string member = "")
         {
             if (amount <= 0)
                 return;
+            BalanceDiary.RecordXp(amount, file, member);
             int before = Level();
             ModEntry.State.SkillXp += amount;
             int after = Level();

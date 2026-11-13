@@ -17,12 +17,12 @@ namespace Agritech
     internal static class Livestock
     {
         /// <summary>Breed definitions: new id, vanilla template, display name, produce, price, unlock skill, recolour.</summary>
-        private static readonly (string id, string template, string name, string desc, string produce, int price, int skill, Color tint, float strength)[] Breeds =
+        internal static readonly (string id, string template, string name, string desc, string produce, int price, int skill, Color tint, float strength)[] Breeds =
         {
-            (Ids.Wagyu, "White Cow", "Wagyu", "Black Japanese cattle. Calm, slow-growing, and the finest marbling there is. Retire an adult for Wagyu cuts.", Ids.VMilk, 4500, 3, new Color(38, 30, 30), 0.85f),
-            (Ids.Merino, "Sheep", "Merino Sheep", "Fine-fleeced sheep. Sheared Merino wool grades above ordinary wool.", Ids.O(Ids.MerinoWool), 6000, 1, new Color(240, 228, 196), 0.55f),
-            (Ids.CashmereGoat, "Goat", "Cashmere Goat", "Combed for its soft undercoat. Use shears to harvest raw cashmere.", Ids.O(Ids.RawCashmere), 5500, 2, new Color(176, 170, 162), 0.6f),
-            (Ids.Angora, "Rabbit", "Angora Rabbit", "A cloud of a rabbit. Use shears for raw angora.", Ids.O(Ids.RawAngora), 6000, 2, new Color(250, 246, 240), 0.6f)
+            (Ids.Wagyu, "White Cow", "Wagyu", "Black Japanese cattle. Calm, slow-growing, and the finest marbling there is. Retire an adult for Wagyu cuts.", Ids.VMilk, 8000, 3, new Color(38, 30, 30), 0.85f),
+            (Ids.Merino, "Sheep", "Merino Sheep", "Fine-fleeced sheep. Sheared Merino wool grades above ordinary wool.", Ids.O(Ids.MerinoWool), 12000, 1, new Color(240, 228, 196), 0.55f),
+            (Ids.CashmereGoat, "Goat", "Cashmere Goat", "Combed for its soft undercoat. Use shears to harvest raw cashmere.", Ids.O(Ids.RawCashmere), 10000, 2, new Color(176, 170, 162), 0.6f),
+            (Ids.Angora, "Rabbit", "Angora Rabbit", "A cloud of a rabbit. Use shears for raw angora.", Ids.O(Ids.RawAngora), 12000, 2, new Color(250, 246, 240), 0.6f)
         };
 
         public static void EditFarmAnimals(IAssetData asset)
@@ -133,7 +133,18 @@ namespace Agritech
             string type = (a.type.Value ?? "").ToLowerInvariant();
             if (!a.isAdult()) { why = $"{a.displayName} isn't an adult yet."; return false; }
             if (!Cattle.Any(type.Contains) && !SmallHide.Any(type.Contains)) { why = $"{a.displayName} can't be retired for hide or meat."; return false; }
+            int left = MinAdultDays - AdultDays(a);
+            if (left > 0) { why = $"{a.displayName} needs a full season as an adult first ({left} more day{(left == 1 ? "" : "s")})."; return false; }
             return true;
+        }
+
+        /// <summary>Days an animal must have been an adult before it can be retired, so stock is raised, not flipped.</summary>
+        public const int MinAdultDays = 28;
+
+        public static int AdultDays(FarmAnimal a)
+        {
+            int mature = a.GetAnimalData()?.DaysToMature ?? 0;
+            return Math.Max(0, a.age.Value - mature);
         }
 
         public static void AskRetire(FarmAnimal a)
@@ -163,7 +174,8 @@ namespace Agritech
             if (cattle)
             {
                 bool wagyu = type.Contains("wagyu");
-                int cuts = 3 + health / 25;
+                // 2 base, +1 per season as an adult (up to +3), +0-2 for health: 5 after one season, up to 7
+                int cuts = 2 + Math.Min(3, AdultDays(a) / 28) + health / 40;
                 Item meat = ItemRegistry.Create(Ids.O(wagyu ? Ids.WagyuCut : Ids.BeefCut), cuts, hideQuality);
                 meat.modData[ModEntry.MadeKey] = Game1.Date.TotalDays.ToString();
                 drops.Add(meat);

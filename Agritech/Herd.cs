@@ -100,7 +100,8 @@ namespace Agritech
         private static bool Today(FarmAnimal a, string key) => a.modData.TryGetValue(key, out string v) && v == Game1.Date.TotalDays.ToString();
         public static bool IsTrained(FarmAnimal a) => a.modData.ContainsKey(TrainedKey);
 
-        private static void Consume() => Game1.player.reduceActiveItemByOne();
+        internal static bool SkipConsume;
+        private static void Consume() { if (!SkipConsume) Game1.player.reduceActiveItemByOne(); }
 
         public static void Feed(FarmAnimal a)
         {

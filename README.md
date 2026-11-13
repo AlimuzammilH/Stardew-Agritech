@@ -8,7 +8,7 @@ Vanilla Stardew sells anything through the shipping bin at a fixed price. Agrite
 
 | Game | Framework | Dependencies | Version |
 | --- | --- | --- | --- |
-| Stardew Valley 1.6.15 | SMAPI 4.0+ (built against 4.5.2) | none required | 0.4.2 |
+| Stardew Valley 1.6.15 | SMAPI 4.0+ (built against 4.5.2) | none required | 0.4.3 |
 
 ## Features
 
@@ -48,7 +48,9 @@ The full in-game guide, with unlock levels and every recipe, is in [`Agritech/RE
 3. Launch the game through SMAPI.
 
 **Keys** (changeable in `config.json`): F7 contract board · F8 terminal · F9 overlay · F10 draw fence zone · F11 cycle zones.
-**Console** (SMAPI window): `agritech` shows your skill level and XP; `agritech_xp <amount>` adds XP for testing.
+**Console** (SMAPI window): `agritech` shows your skill level and XP; `agritech_xp <amount>` adds XP for testing; `agritech_selftest run` (on a throwaway save) drives every feature once and prints PASS/FAIL for each check.
+
+**Balance diary:** while you play, the mod writes one line per in-game day to `Mods/Agritech/balance/<save>.csv` (skill progress, where XP came from, contract income next to shipping-bin income), so balance can be judged from real play.
 
 ## Works with (optional)
 
@@ -65,7 +67,7 @@ Agritech runs on its own. If these mods are installed, it links into them:
 
 - Milk moved by Automate never spoils.
 - You can't gift Gus or Emily an item they have an open order for: clicking them counts as a delivery.
-- The horse herd, Drying Rack, Cold Warehouse, the new dishes and the drones load cleanly but haven't had a full in-game playthrough yet. Bug reports are welcome in [Issues](../../issues).
+- The horse herd, Drying Rack, Cold Warehouse, the new dishes and the drones load cleanly and are covered by `agritech_selftest`, but haven't had a full in-game playthrough yet. Bug reports are welcome in [Issues](../../issues).
 
 ## Building from source
 
@@ -98,6 +100,8 @@ Agritech/
   Visitors.cs         visiting buyers and tourists
   Polish.cs           tooltips, herding, tractor fuel, hand delivery
   Integration.cs      Cloths and Colors / SpaceCore link
+  SelfTest.cs         agritech_selftest: drives every feature once and reports PASS/FAIL
+  BalanceDiary.cs     the daily balance diary
   SaveModel.cs        everything stored in the save
   assets/             original art: items, machines, Hub tiers, buildings, buyers and portraits
 ```

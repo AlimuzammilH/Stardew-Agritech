@@ -48,6 +48,17 @@ namespace Agritech
                 Monitor.Log($"Agritech skill level {lvl}, {State.SkillXp} xp{(lvl < 10 ? $" (next level at {Skill.XpForNext(lvl)})" : "")}. Hub tier {FarmData.HubTier()}.", LogLevel.Info);
                 Monitor.Log("Marnie sells: Merino at level 1; Cashmere Goat, Angora Rabbit and the three horses at 2; Wagyu at 3.", LogLevel.Info);
             });
+            helper.ConsoleCommands.Add("agritech_selftest", "Run every Agritech feature once and report pass/fail. Use a throwaway save: it adds buildings, items, money and XP. Usage: agritech_selftest run", (_, args) =>
+            {
+                if (!Context.IsWorldReady) { Monitor.Log("Load a save first.", LogLevel.Info); return; }
+                if (args.Length < 1 || args[0] != "run")
+                {
+                    Monitor.Log("This changes the save it runs on (buildings, items, money, XP). Load a throwaway save, then type: agritech_selftest run", LogLevel.Warn);
+                    return;
+                }
+                SelfTest.Start(Helper, Monitor);
+            });
+            helper.Events.GameLoop.UpdateTicked += (_, e) => SelfTest.Tick();
             helper.ConsoleCommands.Add("agritech_xp", "Add Agritech skill xp. Usage: agritech_xp <amount>", (_, args) =>
             {
                 if (!Context.IsWorldReady) { Monitor.Log("Load a save first.", LogLevel.Info); return; }
@@ -97,6 +108,7 @@ namespace Agritech
             Visitors.Despawn();
             if (!Context.IsMainPlayer)
                 return;
+            BalanceDiary.WriteDay(Helper);
             FarmData.UpdateSoilOvernight(State);
             Logistics.ColdStoreTick();
             Livestock.NightlyHorses();
@@ -397,7 +409,7 @@ namespace Agritech
         /*********
         ** Terminal
         *********/
-        private static void OpenTerminal()
+        internal static void OpenTerminal()
         {
             int tier = FarmData.HubTier();
             var lines = new List<(string, Color)>();

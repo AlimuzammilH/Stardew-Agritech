@@ -52,7 +52,7 @@ namespace Agritech
             }
         }
 
-        private static void Spawn(IModHelper helper, Farm farm, string who, string displayName, Vector2 tile)
+        internal static void Spawn(IModHelper helper, Farm farm, string who, string displayName, Vector2 tile)
         {
             Texture2D portrait = helper.GameContent.Load<Texture2D>(PortraitAsset(who));
             var npc = new NPC(new AnimatedSprite(SpriteAsset(who), 0, 16, 32), tile * 64f, "Farm", 2, displayName, false, portrait);
@@ -131,6 +131,7 @@ namespace Agritech
                 PaidTours.Add(npc);
                 int fee = 60 + 40 * FarmData.HubTier() + 15 * ModEntry.State.Collars.Count;
                 Game1.player.Money += fee;
+                BalanceDiary.TourIncome += fee;
                 Say(npc, $"We came for the farm tour! The drones, the fences you can't see... here, {fee}g for the visit.");
                 return;
             }

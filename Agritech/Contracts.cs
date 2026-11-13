@@ -283,6 +283,7 @@ namespace Agritech
                 if (s.Spoiled) pay /= 2;
                 if (late) pay = pay * 7 / 10;
                 Game1.player.Money += pay;
+                BalanceDiary.ContractIncome += pay;
                 AddRel(c.BuyerId, s.Spoiled || late ? 10 : 45);
                 Skill.AddXp(40);
                 c.Status = "Done";
