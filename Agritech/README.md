@@ -1,4 +1,4 @@
-# Agritech v0.4.5
+# Agritech v0.4.6
 
 An agritech layer for Stardew Valley 1.6: tech, breeds, leather and meat chains, luxury grading with provenance, contracts with fashion and restaurant houses, freight, waste-to-fuel, drones, horse husbandry and farm visitors. One mod, no hard dependencies.
 
@@ -44,6 +44,12 @@ The fashion and restaurant houses visit on their day each season (8th, 15th, 22n
 
 ## Look
 Sensor posts gain probes, a second antenna and a solar panel as the Hub tier rises. The terminal is a green-screen monitor; the contract board is a corkboard of pinned orders.
+
+## Settings
+With Generic Mod Config Menu installed, Agritech has its own page under the in-game mod options (gear button on the title screen, or Options → Mod Options in-game). Without it, edit `config.json` in this folder.
+- **Keys:** contract board (F7), terminal (F8), soil overlay (F9), draw fence zone (F10), cycle fence zone (F11).
+- **Farm:** morning alerts, buyer visits, weekend tourists, show docked drones, tractor needs fuel.
+- **Economy:** spoilage on/off, skill XP speed (0.5x–3x), contract pay (0.5x–2x, applies to newly posted contracts), adult days before the Butcher's Tag works (0–56, default 28).
 
 ## Testing
 - `agritech` shows your skill level and XP; `agritech_xp <amount>` adds XP.

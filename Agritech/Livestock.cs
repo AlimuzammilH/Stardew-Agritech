@@ -139,7 +139,7 @@ namespace Agritech
         }
 
         /// <summary>Days an animal must have been an adult before it can be retired, so stock is raised, not flipped.</summary>
-        public const int MinAdultDays = 28;
+        public static int MinAdultDays => ModEntry.Config?.MinAdultDaysToRetire ?? 28;
 
         public static int AdultDays(FarmAnimal a)
         {

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.6
+- In-game options page through Generic Mod Config Menu: rebindable keys; morning alerts, buyer visits, weekend tourists, docked-drone visuals and tractor fuel on/off; spoilage on/off; skill XP speed (0.5x–3x); contract pay (0.5x–2x, for newly posted contracts); adult days before the Butcher's Tag works (0–56, default 28). Without the menu mod, the same settings are in `config.json`.
+- Self-test runs on default settings and restores the player's afterwards, and a new check confirms each setting changes the game. 81/81 checks pass in-game.
+
 ## 0.4.5
 - Herd horses now use the same sprite layout as the game's cows (left is the mirrored right; resting and grazing frames in the right places), fixing frozen or wrong resting/grazing animations and the game's sprite-height warning.
 - Herd horses facing the camera now have their head: the game draws a horse's front-facing head separately, so it's baked into those frames.

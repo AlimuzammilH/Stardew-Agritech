@@ -182,7 +182,7 @@ namespace Agritech
                 Quantity = qty,
                 PostedDay = today,
                 DeadlineDay = today + (standing ? 14 : 7 + rng.Next(0, 8)),
-                Reward = (int)(unitPrice * qty * premium),
+                Reward = (int)(unitPrice * qty * premium * ModEntry.Config.ContractPayMultiplier),
                 Standing = standing
             };
         }
@@ -234,7 +234,7 @@ namespace Agritech
             Goods g = Goods.Get(c.MaterialId);
             int arrive = Game1.Date.TotalDays + Transport.Days(mode);
             bool spoiled = false;
-            if (g.Perishable && oldest != null)
+            if (ModEntry.Config.Spoilage && g.Perishable && oldest != null)
             {
                 int shelf = g.Material != null ? 6 : Ids.ShelfLife.TryGetValue(g.Accepted?[0] ?? "", out int s) ? s : 4;
                 spoiled = arrive - oldest.Value > shelf;
@@ -369,7 +369,7 @@ namespace Agritech
 
         public static string Freshness(Item i)
         {
-            if (i == null || !i.modData.TryGetValue(ModEntry.MadeKey, out string made) || !int.TryParse(made, out int d))
+            if (!ModEntry.Config.Spoilage || i == null || !i.modData.TryGetValue(ModEntry.MadeKey, out string made) || !int.TryParse(made, out int d))
                 return null;
             int shelf = Ids.ShelfLife.TryGetValue(i.QualifiedItemId, out int s) ? s : 6;
             int left = shelf - (Game1.Date.TotalDays - d);

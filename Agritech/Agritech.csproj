@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Agritech</AssemblyName>
     <RootNamespace>Agritech</RootNamespace>
-    <Version>0.4.5</Version>
+    <Version>0.4.6</Version>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>disable</Nullable>
     <LangVersion>latest</LangVersion>

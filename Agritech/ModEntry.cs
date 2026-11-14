@@ -25,6 +25,7 @@ namespace Agritech
 
         public static SaveModel State { get; private set; } = new();
         internal static ModConfig Config { get; private set; }
+        internal static void SetConfig(ModConfig config) => Config = config;
 
         private bool overlayOn;
         private int lastSensorSprite = -1;
@@ -68,7 +69,7 @@ namespace Agritech
             });
 
             helper.Events.Content.AssetRequested += (_, e) => ContentRegistry.Handle(e, helper);
-            helper.Events.GameLoop.GameLaunched += (_, _) => Integration.Init(helper, Monitor);
+            helper.Events.GameLoop.GameLaunched += (_, _) => { Integration.Init(helper, Monitor); ConfigMenu.Register(helper, ModManifest, Monitor); };
             helper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
             helper.Events.GameLoop.Saving += OnSaving;
             helper.Events.GameLoop.DayEnding += OnDayEnding;
@@ -201,7 +202,8 @@ namespace Agritech
             if (e.IsMultipleOf(10))
                 Livestock.TickRiding();
             if (e.IsMultipleOf(15))
-                Polish.TickTractor();
+                if (Config.TractorNeedsFuel)
+                    Polish.TickTractor();
             if (!Context.IsMainPlayer)
                 return;
             if (e.IsMultipleOf(180))
@@ -575,7 +577,8 @@ namespace Agritech
             if (drawingFence && fenceCorner != null)
                 DrawTile(b, fenceCorner.Value, Color.Gold * 0.6f);
 
-            Drones.Draw(b, itemsTexture);
+            if (Config.ShowDockedDrones)
+                Drones.Draw(b, itemsTexture);
         }
 
         private static void DrawTile(SpriteBatch b, Vector2 tile, Color color)

@@ -46,6 +46,7 @@ namespace Agritech
         {
             if (amount <= 0)
                 return;
+            amount = Math.Max(1, (int)Math.Round(amount * ModEntry.Config.XpMultiplier));
             BalanceDiary.RecordXp(amount, file, member);
             int before = Level();
             ModEntry.State.SkillXp += amount;

@@ -32,7 +32,7 @@ namespace Agritech
             Point door = farm.GetMainFarmHouseEntry();
             int slot = 0;
 
-            foreach (Buyer b in Buyer.All.Where(b => b.VisitDay == Game1.dayOfMonth && b.Unlocked()))
+            foreach (Buyer b in Buyer.All.Where(b => ModEntry.Config.BuyerVisits && b.VisitDay == Game1.dayOfMonth && b.Unlocked()))
             {
                 Spawn(helper, farm, b.Id, b.Name, new Vector2(door.X - 2 + slot * 2, door.Y + 3));
                 slot++;
@@ -41,7 +41,7 @@ namespace Agritech
 
             // weekend tourists, once the Hub is up
             bool weekend = Game1.Date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
-            if (weekend && FarmData.HubTier() >= 1 && !Game1.IsRainingHere(farm))
+            if (ModEntry.Config.Tourists && weekend && FarmData.HubTier() >= 1 && !Game1.IsRainingHere(farm))
             {
                 int count = 1 + rng.Next(0, 3);
                 for (int i = 0; i < count; i++)

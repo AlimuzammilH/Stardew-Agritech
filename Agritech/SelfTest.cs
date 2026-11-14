@@ -37,6 +37,7 @@ namespace Agritech
         private static readonly List<Vector2> placedDirt = new();
         private static readonly List<Building> placedBuildings = new();
         private static Farm farm;
+        private static ModConfig playerConfig;
         private static Point origin;
 
         // menu checks run across frames, so a crash while drawing shows up
@@ -58,6 +59,8 @@ namespace Agritech
             placedBuildings.Clear();
             farm = Game1.getFarm();
             Running = true;
+            playerConfig = ModEntry.Config;          // run on default settings; the player's come back afterwards
+            ModEntry.SetConfig(new ModConfig());
             Herd.SkipConsume = true;
             Log("Agritech self-test started on " + Constants.SaveFolderName);
 
@@ -88,6 +91,7 @@ namespace Agritech
                 TestNightly();
                 TestTooltip();
                 TestIntegration();
+                TestSettings();
             }
             catch (Exception ex)
             {
@@ -141,6 +145,8 @@ namespace Agritech
         private static void Finish()
         {
             Cleanup();
+            if (playerConfig != null)
+                ModEntry.SetConfig(playerConfig);
             Herd.SkipConsume = false;
             Running = false;
             string summary = $"Agritech self-test finished: {passed} passed, {failed} failed.";
@@ -560,6 +566,56 @@ namespace Agritech
                     return "C&C's yarn spinner isn't in the machine data";
                 var ours = new[] { Ids.RawCashmere, Ids.RawAngora, Ids.MerinoWool }.Where(i => !spinner.OutputRules.Any(r => r.Id == Ids.P + i)).ToList();
                 return ours.Count == 0 ? null : "no spinner rule for " + string.Join(", ", ours);
+            });
+        }
+
+        private static void TestSettings()
+        {
+            Check("settings change the game", () =>
+            {
+                var cfg = ModEntry.Config;
+                var problems = new List<string>();
+
+                cfg.Spoilage = false;
+                var c = TestContract("Milk", 0, 1, 1000);
+                Item milk = ItemRegistry.Create(Ids.VMilk);
+                milk.modData[ModEntry.MadeKey] = (Game1.Date.TotalDays - 20).ToString();
+                ContractBook.Ship(c, new List<Item> { milk }, "Cart", chargeFuel: false);
+                if (ModEntry.State.Shipments.First(s => s.ContractId == c.Id).Spoiled)
+                    problems.Add("spoilage off still spoiled a delivery");
+                ModEntry.State.Shipments.RemoveAll(s => s.ContractId == c.Id);
+                ModEntry.State.Contracts.Remove(c);
+                cfg.Spoilage = true;
+
+                cfg.XpMultiplier = 2f;
+                int before = ModEntry.State.SkillXp;
+                Skill.AddXp(10);
+                if (ModEntry.State.SkillXp - before != 20)
+                    problems.Add($"2x XP gave {ModEntry.State.SkillXp - before} instead of 20");
+                cfg.XpMultiplier = 1f;
+
+                cfg.MinAdultDaysToRetire = 0;
+                var young = NewAnimal(Ids.Wagyu);
+                young.age.Value = 10;
+                if (!Livestock.CanRetire(young, out string why))
+                    problems.Add("0 adult days still blocked retiring: " + why);
+                cfg.MinAdultDaysToRetire = 28;
+
+                cfg.ContractPayMultiplier = 2f;
+                int countBefore = ModEntry.State.Contracts.Count;
+                ContractBook.PostWeekly(new Random(1));
+                var doubled = ModEntry.State.Contracts.Skip(countBefore).ToList();
+                foreach (var d in doubled)
+                    ModEntry.State.Contracts.Remove(d);
+                cfg.ContractPayMultiplier = 1f;
+                ContractBook.PostWeekly(new Random(1));
+                var normal = ModEntry.State.Contracts.Skip(countBefore).ToList();
+                foreach (var d in normal)
+                    ModEntry.State.Contracts.Remove(d);
+                if (doubled.Count == 0 || normal.Count == 0 || doubled.Sum(x => x.Reward) < normal.Sum(x => x.Reward) * 1.9)
+                    problems.Add($"2x contract pay posted {doubled.Sum(x => x.Reward)} vs {normal.Sum(x => x.Reward)} at 1x");
+
+                return problems.Count == 0 ? null : string.Join("; ", problems);
             });
         }
 
